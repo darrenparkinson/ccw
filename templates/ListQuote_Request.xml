@@ -1,0 +1,69 @@
+<soapenv:Envelope xmlns:ns="http://docs.oasis-open.org/ebxmlmsg/ebms/v3.0/ns/core/200704/" xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header>
+        <ns:Messaging>
+            <ns:UserMessage>
+                <ns:MessageInfo>
+                    <ns:Timestamp>2011-05-30T16:13:17</ns:Timestamp>
+
+                    <ns:MessageId>urn:uuid:ListQuote_GoLive_LQEnhancement_Run1@ListQuoteClient.partner.com</ns:MessageId>
+                </ns:MessageInfo>
+                <ns:PartyInfo>
+                    <ns:From>
+                        <ns:PartyId>ListQuoteClient.partner.com</ns:PartyId>
+                        <ns:Role>http://example.org/roles/Buyer</ns:Role>
+                    </ns:From>
+                    <ns:To>
+                        <ns:PartyId>ListQuoteService.cisco.com</ns:PartyId>
+                        <ns:Role>http://example.org/roles/Seller</ns:Role>
+                    </ns:To>
+                </ns:PartyInfo>
+                <ns:CollaborationInfo>
+                    <ns:AgreementRef>value1</ns:AgreementRef>
+                    <ns:Service>value2</ns:Service>
+                    <ns:Action>value3</ns:Action>
+                </ns:CollaborationInfo>
+                <ns:MessageProperties>
+                    <ns:Property name="TestProperty">TestProperty</ns:Property>
+                </ns:MessageProperties>
+                <ns:PayloadInfo>
+                    <ns:PartInfo href="cid:part@example.com">
+                        <ns:Schema location="http://www.cisco.com/assets/wsx_xsd/QWS/root.xsd" version="2.0" />
+                        <ns:PartProperties>
+                            <ns:Property name="Description">Description</ns:Property>
+                            <ns:Property name="MimeType">application/xml</ns:Property>
+                        </ns:PartProperties>
+                    </ns:PartInfo>
+                </ns:PayloadInfo>
+            </ns:UserMessage>
+        </ns:Messaging>
+    </soapenv:Header>
+    <soapenv:Body>
+        <ns1:GetQuote releaseID="2" xmlns:ns1="http://www.openapplications.org/oagis/9">
+            <ns1:ApplicationArea>
+                <ns1:Sender>
+                    <ns1:ComponentID>test</ns1:ComponentID>
+
+                    <ns1:AuthorizationID>pec_hold_test_12</ns1:AuthorizationID>
+                </ns1:Sender>
+                <ns1:CreationDateTime>2011-01-13</ns1:CreationDateTime>
+            </ns1:ApplicationArea>
+            <ns1:DataArea>
+                <ns1:Get maxItems="500">
+                    <ns1:Expression expressionLanguage="SortOrder" />
+                    <ns1:Expression expressionLanguage="DealId">{{.DealID}}</ns1:Expression>
+                </ns1:Get>
+                <ns1:Quote>
+                    <ns1:QuoteHeader>
+                        <ns1:Status>
+                            <ns1:Code>All</ns1:Code>
+                        </ns1:Status>
+                        <ns1:Description>
+                            <ns1:Expression expressionLanguage="ResellerAccountNumber"></ns1:Expression>
+                            <ns1:Expression expressionLanguage="SourceProfileId"></ns1:Expression>
+                        </ns1:Description>
+                    </ns1:QuoteHeader>
+                </ns1:Quote>
+            </ns1:DataArea>
+        </ns1:GetQuote>
+    </soapenv:Body>
+</soapenv:Envelope>

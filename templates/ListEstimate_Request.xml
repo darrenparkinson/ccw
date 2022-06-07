@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Header>
+        <h:Messaging xmlns:h="http://docs.oasis-open.org/ebxml-msg/ebms/v3.0/ns/core/200704/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://docs.oasis-open.org/ebxml-msg/ebms/v3.0/ns/core/200704/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserMessage>
+                <MessageInfo>
+                    <Timestamp>2019-01-31T13:56:44.000Z</Timestamp>
+                    <MessageId>urn:uuid:20190131135644@partner.com</MessageId>
+                </MessageInfo>
+                <PartyInfo>
+                    <From>
+                        <PartyId>estimates.partner.com</PartyId>
+                        <Role>partner.com/roles/Buyer</Role>
+                    </From>
+                    <To>
+                        <PartyId>estimates.partner.com</PartyId>
+                        <Role>partner.com/roles/Seller</Role>
+                    </To>
+                </PartyInfo>
+                <CollaborationInfo />
+                <MessageProperties />
+                <PayloadInfo>
+                    <PartInfo href="id:part@partner.com">
+                        <Schema location="http://www.cisco.com/assets/wsx_xsd/QWS/root.xsd" version="2.0" />
+                        <PartProperties>
+                            <Property name="Description">Partner Estimates</Property>
+                            <Property name="MimeType">application/xml</Property>
+                        </PartProperties>
+                    </PartInfo>
+                </PayloadInfo>
+            </UserMessage>
+        </h:Messaging>
+    </s:Header>
+    <s:Body>
+        <GetQuote releaseID="2014" versionID="1.0" systemEnvironmentCode="Production" languageCode="en-US" xmlns="http://www.openapplications.org/oagis/10">
+            <ApplicationArea>
+                <Sender>
+                    <ComponentID schemeAgencyID="Cisco">B2B-3.0</ComponentID>
+                </Sender>
+                <CreationDateTime>2019-01-31</CreationDateTime>
+                <BODID schemeAgencyID="Cisco">urn:uuid:20190131135644@estimates.partner.com</BODID>
+                <Extension>
+                    <Code typeCode="Estimate">Estimate</Code>
+                </Extension>
+            </ApplicationArea>
+            <DataArea>
+                <Get maxItems="25">
+                    <Expression expressionLanguage="FromDate">2017-11-13T01:56:40Z</Expression>
+                    <Expression expressionLanguage="ToDate">2019-01-31T01:56:40Z</Expression>
+                    <Expression expressionLanguage="SortBy">LAST_MODIFIED</Expression>
+                    <Expression expressionLanguage="SortOrder">DESC</Expression>
+                </Get>
+                <Quote>
+                    <QuoteHeader>
+                        <Status>
+                            <Code typeCode="EstimateStatus">ALL</Code>
+                        </Status>
+                    </QuoteHeader>
+                </Quote>
+            </DataArea>
+        </GetQuote>
+    </s:Body>
+</s:Envelope>

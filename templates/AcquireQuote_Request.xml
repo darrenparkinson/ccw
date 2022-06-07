@@ -1,0 +1,62 @@
+<soapenv:Envelope xmlns:ns="http://docs.oasis-open.org/ebxml-msg/ebms/v3.0/ns/core/200704/" xmlns:ns1="http://www.openapplications.org/oagis/9" xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header>
+        <ns:Messaging>
+            <ns:UserMessage>
+                <ns:MessageInfo>
+                    <ns:Timestamp>2011-05-30T16:13:17</ns:Timestamp>
+                    <ns:MessageId>urn:uuid:AcquireQuote_1383111095217@AcquireQuoteClient.partner.com</ns:MessageId>
+                </ns:MessageInfo>
+                <ns:PartyInfo>
+                    <ns:From>
+                        <ns:PartyId>AcquireQuoteClient.partner.com</ns:PartyId>
+                        <ns:Role>http://example.org/roles/Buyer</ns:Role>
+                    </ns:From>
+                    <ns:To>
+                        <ns:PartyId>AcquireQuoteService.cisco.com</ns:PartyId>
+                        <ns:Role>http://example.org/roles/Seller</ns:Role>
+                    </ns:To>
+                </ns:PartyInfo>
+                <ns:CollaborationInfo>
+                    <ns:AgreementRef>value1</ns:AgreementRef>
+                    <ns:Service>value2</ns:Service>
+                    <ns:Action>value3</ns:Action>
+                </ns:CollaborationInfo>
+                <ns:MessageProperties>
+                    <ns:Property name="TestProperty">Testing the Property</ns:Property>
+                </ns:MessageProperties>
+                <ns:PayloadInfo>
+                    <ns:PartInfo href="cid:part@example.com">
+                        <ns:Schema location="http://www.cisco.com/assets/wsx_xsd/QWS/root.xsd" version="2.0" />
+                        <ns:PartProperties>
+                            <ns:Property name="Description">Cisco Service Test</ns:Property>
+                            <ns:Property name="MimeType">application/xml</ns:Property>
+                        </ns:PartProperties>
+                    </ns:PartInfo>
+                </ns:PayloadInfo>
+            </ns:UserMessage>
+        </ns:Messaging>
+    </soapenv:Header>
+    <soapenv:Body>
+        <ns1:GetQuote releaseID="2">
+            <ns1:ApplicationArea>
+                <ns1:Sender>
+                    <ns1:LogicalID>12345</ns1:LogicalID>
+                    <ns1:ComponentID>test</ns1:ComponentID>
+                    <ns1:ReferenceID>IBM</ns1:ReferenceID>
+                    <ns1:AuthorizationID>aaguirrevsgi</ns1:AuthorizationID>
+                </ns1:Sender>
+                <ns1:Receiver>
+                    <ns1:LogicalID>12345</ns1:LogicalID>
+                    <ns1:ID>Cisco</ns1:ID>
+                </ns1:Receiver>
+                <ns1:CreationDateTime>2011-08-03</ns1:CreationDateTime>
+                <ns1:BODID schemeAgencyID="" schemeAgencyName="Cisco" schemeDataURI="http://tempuri.org" schemeID="" schemeName="" schemeURI="http://tempuri.org" schemeVersionID="1.0">123</ns1:BODID>
+            </ns1:ApplicationArea>
+            <ns1:DataArea>
+                <ns1:Get>
+                    <ns1:Expression expressionLanguage="DealId">{{.DealID}}</ns1:Expression>
+                </ns1:Get>
+            </ns1:DataArea>
+        </ns1:GetQuote>
+    </soapenv:Body>
+</soapenv:Envelope>
