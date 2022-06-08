@@ -86,6 +86,15 @@ type AcquireQuoteResponseItem struct {
 	ProductTypeClassification string      `json:"productTypeClassification"`
 	ServiceLevelName          string      `json:"serviceLevelName"`
 	ServiceType               string      `json:"serviceType"`
+	// UserArea fields
+	MagicKey           *string `json:"magicKey,omitempty"`
+	RequestedStartDate *string `json:"requestedStartDate,omitempty"`
+	InitialTerm        *string `json:"initialTerm,omitempty"`
+	AutoRenewalTerm    *string `json:"autoRenewalTerm,omitempty"`
+	BillingModel       *string `json:"billingModel,omitempty"`
+	ChargeType         *string `json:"chargeType,omitempty"`
+	UnitOfMeasurement  *string `json:"unitOfMeasurement,omitempty"`
+	AdditionalItemInfo *string `json:"additionalItemInfo,omitempty"`
 }
 
 type floatOrNull float64
@@ -308,6 +317,17 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 		ql.UnitPrice = vUnitPrice
 		vQuantity, _ := strconv.ParseInt(line.Quantity, 10, 0)
 		ql.Quantity = vQuantity
+
+		// Additional UserArea fields
+		ciscoLine := line.UserArea.CiscoExtensions.CiscoLine
+		ql.MagicKey = String(ciscoLine.MagicKey)
+		ql.RequestedStartDate = String(ciscoLine.RequestedStartDate)
+		ql.InitialTerm = String(ciscoLine.InitialTerm)
+		ql.AutoRenewalTerm = String(ciscoLine.AutoRenewalTerm)
+		ql.BillingModel = String(ciscoLine.BillingModel)
+		ql.ChargeType = String(ciscoLine.ChargeType)
+		ql.UnitOfMeasurement = String(ciscoLine.UnitOfMeasurement)
+		ql.AdditionalItemInfo = String(ciscoLine.AdditionalItemInfo)
 
 		aqr.LineItems = append(aqr.LineItems, ql)
 	}
@@ -676,9 +696,21 @@ type AcquireQuoteXMLResponse struct {
 										ProductConfigurationReference string `xml:"ProductConfigurationReference"`
 										ConfigurationSelectCode       string `xml:"ConfigurationSelectCode"`
 									} `xml:"ConfiguratorInformation"`
-									MagicKey      string `xml:"MagicKey"`
-									CIExtNetPrice string `xml:"CIExtNetPrice"`
-									ShipToParty   struct {
+									MagicKey              string `xml:"MagicKey"`
+									RequestedStartDate    string `xml:"RequestedStartDate"`
+									InitialTerm           string `xml:"InitialTerm"`
+									AutoRenewalTerm       string `xml:"AutoRenewalTerm"`
+									BillingModel          string `xml:"BillingModel"`
+									AdditionalItemInfo    string `xml:"AdditionalItemInfo"`
+									ListPriceVersion      string `xml:"ListPriceVersion"`
+									UtilityDrawdownAmount string `xml:"UtilityDrawdownAmount"`
+									TransactionInfoID     string `xml:"TransactionInfoID"`
+									ChargeType            string `xml:"ChargeType"`
+									UnitOfMeasurement     string `xml:"UnitOfMeasurement"`
+									UsageQuantity         string `xml:"UsageQuantity"`
+									PricingTerm           string `xml:"PricingTerm"`
+									CIExtNetPrice         string `xml:"CIExtNetPrice"`
+									ShipToParty           struct {
 										Text     string `xml:",chardata"`
 										Location struct {
 											Text    string `xml:",chardata"`
