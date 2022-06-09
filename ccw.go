@@ -209,3 +209,14 @@ func String(v string) *string {
 // Int64 is a helper routine that allocates a new int64 value
 // to store v and returns a pointer to it.
 func Int64(v int64) *int64 { return &v }
+
+// IntOrNil is a helper routine that allocates a new int64 value
+// to store v and returns a pointer to it, unless it's zero in
+// which case it will return nil. Use this for values you don't
+// want to appear in output if they're zero.
+func IntOrNil(v int64) *int64 {
+	if v != 0 {
+		return &v
+	}
+	return nil
+}

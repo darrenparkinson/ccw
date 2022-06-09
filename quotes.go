@@ -89,8 +89,8 @@ type AcquireQuoteResponseItem struct {
 	// UserArea fields
 	MagicKey           *string `json:"magicKey,omitempty"`
 	RequestedStartDate *string `json:"requestedStartDate,omitempty"`
-	InitialTerm        *string `json:"initialTerm,omitempty"`
-	AutoRenewalTerm    *string `json:"autoRenewalTerm,omitempty"`
+	InitialTerm        *int64  `json:"initialTerm,omitempty"`
+	AutoRenewalTerm    *int64  `json:"autoRenewalTerm,omitempty"`
 	BillingModel       *string `json:"billingModel,omitempty"`
 	ChargeType         *string `json:"chargeType,omitempty"`
 	UnitOfMeasurement  *string `json:"unitOfMeasurement,omitempty"`
@@ -322,8 +322,10 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 		ciscoLine := line.UserArea.CiscoExtensions.CiscoLine
 		ql.MagicKey = String(ciscoLine.MagicKey)
 		ql.RequestedStartDate = String(ciscoLine.RequestedStartDate)
-		ql.InitialTerm = String(ciscoLine.InitialTerm)
-		ql.AutoRenewalTerm = String(ciscoLine.AutoRenewalTerm)
+		initialTerm, _ := strconv.ParseInt(ciscoLine.InitialTerm, 10, 0)
+		ql.InitialTerm = IntOrNil(initialTerm)
+		renewalTerm, _ := strconv.ParseInt(ciscoLine.AutoRenewalTerm, 10, 0)
+		ql.AutoRenewalTerm = IntOrNil(renewalTerm)
 		ql.BillingModel = String(ciscoLine.BillingModel)
 		ql.ChargeType = String(ciscoLine.ChargeType)
 		ql.UnitOfMeasurement = String(ciscoLine.UnitOfMeasurement)
