@@ -95,6 +95,7 @@ type AcquireQuoteResponseItem struct {
 	ChargeType         *string `json:"chargeType,omitempty"`
 	UnitOfMeasurement  *string `json:"unitOfMeasurement,omitempty"`
 	AdditionalItemInfo *string `json:"additionalItemInfo,omitempty"`
+	PricingTerm        *int64  `json:"pricingTerm,omitempty"`
 }
 
 type floatOrNull float64
@@ -330,6 +331,8 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 		ql.ChargeType = String(ciscoLine.ChargeType)
 		ql.UnitOfMeasurement = String(ciscoLine.UnitOfMeasurement)
 		ql.AdditionalItemInfo = String(ciscoLine.AdditionalItemInfo)
+		pricingTerm, _ := strconv.ParseInt(ciscoLine.PricingTerm, 10, 0)
+		ql.PricingTerm = IntOrNil(pricingTerm)
 
 		aqr.LineItems = append(aqr.LineItems, ql)
 	}
