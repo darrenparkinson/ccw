@@ -86,6 +86,7 @@ type AcquireQuoteResponseItem struct {
 	ProductTypeClassification string      `json:"productTypeClassification"`
 	ServiceLevelName          string      `json:"serviceLevelName"`
 	ServiceType               string      `json:"serviceType"`
+	ParentLineNumber          *string     `json:"parentLineNumber,omitempty"`
 	// UserArea fields
 	MagicKey           *string `json:"magicKey,omitempty"`
 	RequestedStartDate *string `json:"requestedStartDate,omitempty"`
@@ -96,6 +97,9 @@ type AcquireQuoteResponseItem struct {
 	UnitOfMeasurement  *string `json:"unitOfMeasurement,omitempty"`
 	AdditionalItemInfo *string `json:"additionalItemInfo,omitempty"`
 	PricingTerm        *int64  `json:"pricingTerm,omitempty"`
+
+	RemainingTerm           *float64 `json:"remainingTerm,omitempty"`
+	SubscriptionReferenceID *string  `json:"subscriptionReferenceID,omitempty"`
 }
 
 type floatOrNull float64
@@ -260,6 +264,11 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 			ql.ProductTypeClassification = line.Item.Classification.Type.Text
 		}
 		for _, prop := range item.Specification.Property {
+
+			if prop.ParentID != "" && prop.ParentID != "0" {
+				ql.ParentLineNumber = String(prop.ParentID)
+			}
+
 			switch prop.NameValue.Name {
 			case "CCWLineNumber":
 				ql.CCWLineNumber = prop.NameValue.Text
@@ -321,6 +330,7 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 
 		// Additional UserArea fields
 		ciscoLine := line.UserArea.CiscoExtensions.CiscoLine
+		ql.SubscriptionReferenceID = String(ciscoLine.SubscriptionReferenceID)
 		ql.MagicKey = String(ciscoLine.MagicKey)
 		ql.RequestedStartDate = String(ciscoLine.RequestedStartDate)
 		initialTerm, _ := strconv.ParseInt(ciscoLine.InitialTerm, 10, 0)
@@ -333,6 +343,8 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 		ql.AdditionalItemInfo = String(ciscoLine.AdditionalItemInfo)
 		pricingTerm, _ := strconv.ParseInt(ciscoLine.PricingTerm, 10, 0)
 		ql.PricingTerm = IntOrNil(pricingTerm)
+		remainingTerm, _ := strconv.ParseFloat(ciscoLine.RemainingTerm, 64)
+		ql.RemainingTerm = FloatOrNil(remainingTerm)
 
 		aqr.LineItems = append(aqr.LineItems, ql)
 	}
@@ -701,21 +713,31 @@ type AcquireQuoteXMLResponse struct {
 										ProductConfigurationReference string `xml:"ProductConfigurationReference"`
 										ConfigurationSelectCode       string `xml:"ConfigurationSelectCode"`
 									} `xml:"ConfiguratorInformation"`
-									MagicKey              string `xml:"MagicKey"`
-									RequestedStartDate    string `xml:"RequestedStartDate"`
-									InitialTerm           string `xml:"InitialTerm"`
-									AutoRenewalTerm       string `xml:"AutoRenewalTerm"`
-									BillingModel          string `xml:"BillingModel"`
-									AdditionalItemInfo    string `xml:"AdditionalItemInfo"`
-									ListPriceVersion      string `xml:"ListPriceVersion"`
-									UtilityDrawdownAmount string `xml:"UtilityDrawdownAmount"`
-									TransactionInfoID     string `xml:"TransactionInfoID"`
-									ChargeType            string `xml:"ChargeType"`
-									UnitOfMeasurement     string `xml:"UnitOfMeasurement"`
-									UsageQuantity         string `xml:"UsageQuantity"`
-									PricingTerm           string `xml:"PricingTerm"`
-									CIExtNetPrice         string `xml:"CIExtNetPrice"`
-									ShipToParty           struct {
+									MagicKey                string `xml:"MagicKey"`
+									RequestedStartDate      string `xml:"RequestedStartDate"`
+									InitialTerm             string `xml:"InitialTerm"`
+									AutoRenewalTerm         string `xml:"AutoRenewalTerm"`
+									BillingModel            string `xml:"BillingModel"`
+									AdditionalItemInfo      string `xml:"AdditionalItemInfo"`
+									ListPriceVersion        string `xml:"ListPriceVersion"`
+									UtilityDrawdownAmount   string `xml:"UtilityDrawdownAmount"`
+									TransactionInfoID       string `xml:"TransactionInfoID"`
+									ChargeType              string `xml:"ChargeType"`
+									UnitOfMeasurement       string `xml:"UnitOfMeasurement"`
+									UsageQuantity           string `xml:"UsageQuantity"`
+									PricingTerm             string `xml:"PricingTerm"`
+									CIExtNetPrice           string `xml:"CIExtNetPrice"`
+									SubscriptionReferenceID string `xml:"SubscriptionReferenceID"`
+									CurrentBillingAmount    string `xml:"CurrentBillingAmount"`
+									NewBillingAmount        string `xml:"NewBillingAmount"`
+									BillingAmountNetChange  string `xml:"BillingAmountNetChange"`
+									UnitNetPriceWithCredits string `xml:"UnitNetPriceWithCredits"`
+									CurrentContractAmount   string `xml:"CurrentContractAmount"`
+									NewContractAmount       string `xml:"NewContractAmount"`
+									ContractAmountNetChange string `xml:"ContractAmountNetChange"`
+									RemainingTerm           string `xml:"RemainingTerm"`
+									OldQuantity             string `xml:"OldQuantity"`
+									ShipToParty             struct {
 										Text     string `xml:",chardata"`
 										Location struct {
 											Text    string `xml:",chardata"`

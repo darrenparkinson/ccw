@@ -220,3 +220,14 @@ func IntOrNil(v int64) *int64 {
 	}
 	return nil
 }
+
+// FloatOrNil is a helper routine that allocates a new float64 value
+// to store v and returns a pointer to it, unless it's zero in
+// which case it will return nil. Use this for values you don't
+// want to appear in output if they're zero.
+func FloatOrNil(v float64) *float64 {
+	if v != 0 {
+		return &v
+	}
+	return nil
+}
