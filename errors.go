@@ -14,4 +14,5 @@ const (
 	ErrForbidden     = Err("ccw: forbidden")
 	ErrInternalError = Err("ccw: internal error")
 	ErrUnknown       = Err("ccw: unexpected error occurred")
+	ErrNotFound      = Err("ccw: not found")
 )

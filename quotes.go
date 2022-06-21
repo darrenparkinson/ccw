@@ -150,7 +150,16 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 
 	quoteSuccess := resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Reason
 	if quoteSuccess != "Success" {
-		return nil, fmt.Errorf("%s: %s", resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Reason, resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Text)
+		if resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Reason != "" && resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Text != "" {
+			return nil, fmt.Errorf("%s: %s", resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Reason, resp.Body.ShowQuote.DataArea.Show.ResponseCriteria.ChangeStatus.Text)
+		}
+		if resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.ID != "" && resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.Description != "" {
+			if resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.ID == "DAQS033" {
+				return nil, fmt.Errorf("%w: %s: %s", ErrNotFound, resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.ID, resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.Description)
+			}
+			return nil, fmt.Errorf("%s: %s", resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.ID, resp.Body.ShowQuote.DataArea.Quote.QuoteHeader.UserArea.CiscoExtensions.CiscoHeader.ConfigurationMessages.Description)
+		}
+		return nil, ErrUnknown
 	}
 
 	// 5. Format the response

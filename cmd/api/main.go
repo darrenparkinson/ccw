@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -48,7 +49,22 @@ func (app *application) QuoteHandler(w http.ResponseWriter, r *http.Request) {
 
 	qr, err := app.ccwc.QuoteService.AcquireByDealID(context.Background(), vars["dealid"])
 	if err != nil {
-		log.Println(err)
+		if errors.Is(err, ccw.ErrNotFound) {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		if errors.Is(err, ccw.ErrBadRequest) {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		if errors.Is(err, ccw.ErrUnauthorized) {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		if errors.Is(err, ccw.ErrForbidden) {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
