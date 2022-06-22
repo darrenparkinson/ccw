@@ -88,15 +88,15 @@ type AcquireQuoteResponseItem struct {
 	ServiceType               string      `json:"serviceType"`
 	ParentLineNumber          *string     `json:"parentLineNumber,omitempty"`
 	// UserArea fields
-	MagicKey           *string `json:"magicKey,omitempty"`
-	RequestedStartDate *string `json:"requestedStartDate,omitempty"`
-	InitialTerm        *int64  `json:"initialTerm,omitempty"`
-	AutoRenewalTerm    *int64  `json:"autoRenewalTerm,omitempty"`
-	BillingModel       *string `json:"billingModel,omitempty"`
-	ChargeType         *string `json:"chargeType,omitempty"`
-	UnitOfMeasurement  *string `json:"unitOfMeasurement,omitempty"`
-	AdditionalItemInfo *string `json:"additionalItemInfo,omitempty"`
-	PricingTerm        *int64  `json:"pricingTerm,omitempty"`
+	MagicKey           *string  `json:"magicKey,omitempty"`
+	RequestedStartDate *string  `json:"requestedStartDate,omitempty"`
+	InitialTerm        *float64 `json:"initialTerm,omitempty"`
+	AutoRenewalTerm    *int64   `json:"autoRenewalTerm,omitempty"`
+	BillingModel       *string  `json:"billingModel,omitempty"`
+	ChargeType         *string  `json:"chargeType,omitempty"`
+	UnitOfMeasurement  *string  `json:"unitOfMeasurement,omitempty"`
+	AdditionalItemInfo *string  `json:"additionalItemInfo,omitempty"`
+	PricingTerm        *int64   `json:"pricingTerm,omitempty"`
 
 	RemainingTerm           *float64 `json:"remainingTerm,omitempty"`
 	SubscriptionReferenceID *string  `json:"subscriptionReferenceID,omitempty"`
@@ -342,8 +342,8 @@ func (s *QuoteService) AcquireByDealID(ctx context.Context, dealID string) (*Acq
 		ql.SubscriptionReferenceID = String(ciscoLine.SubscriptionReferenceID)
 		ql.MagicKey = String(ciscoLine.MagicKey)
 		ql.RequestedStartDate = String(ciscoLine.RequestedStartDate)
-		initialTerm, _ := strconv.ParseInt(ciscoLine.InitialTerm, 10, 0)
-		ql.InitialTerm = IntOrNil(initialTerm)
+		initialTerm, _ := strconv.ParseFloat(ciscoLine.InitialTerm, 64)
+		ql.InitialTerm = FloatOrNil(initialTerm)
 		renewalTerm, _ := strconv.ParseInt(ciscoLine.AutoRenewalTerm, 10, 0)
 		ql.AutoRenewalTerm = IntOrNil(renewalTerm)
 		ql.BillingModel = String(ciscoLine.BillingModel)
